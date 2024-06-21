@@ -17,8 +17,8 @@ def borrar_cookies(userPath):
     if cookies_user == "s":
         print("Eliminando cookies...")
         files_to_delete = [
-            os.path.join(userPath, "\\AppData\\ocal\\Vivaldi\\User Data\\Default\\Network\\Cookies-journal"),
-            os.path.join(userPath, "\\AppData\\Local\\Vivaldi\\User Data\\Default\\Network\\Cookies")
+            os.path.join(userPath, "AppData\\ocal\\Vivaldi\\User Data\\Default\\Network\\Cookies-journal"),
+            os.path.join(userPath, "AppData\\Local\\Vivaldi\\User Data\\Default\\Network\\Cookies")
             
             #para chrome
             #C:\Users\franc\AppData\Local\Google\Chrome\User Data\Default\Network
