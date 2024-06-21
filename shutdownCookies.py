@@ -1,5 +1,10 @@
 import os
 import time
+from pathlib import Path
+
+
+def obtenerRutaUsuario():
+    return "{}\\".format(Path.home())
 
 def cerrar_aplicaciones():
     print("Cerrando aplicaciones...")
@@ -7,14 +12,14 @@ def cerrar_aplicaciones():
     time.sleep(2)  # Espera 2 segundos
     print("Aplicaciones cerradas")
 
-def borrar_cookies():
+def borrar_cookies(userPath):
     cookies_user = input("¿Quieres borrar las Cookies de inicio de sesión? [S/N]: ").lower()
     if cookies_user == "s":
         print("Eliminando cookies...")
         files_to_delete = [
-            r"C:\Users\franc\AppData\Local\Vivaldi\User Data\Default\Network\Cookies-journal",
-            r"C:\Users\franc\AppData\Local\Vivaldi\User Data\Default\Network\Cookies"
-
+            os.path.join(userPath, "\\AppData\\ocal\\Vivaldi\\User Data\\Default\\Network\\Cookies-journal"),
+            os.path.join(userPath, "\\AppData\\Local\\Vivaldi\\User Data\\Default\\Network\\Cookies")
+            
             #para chrome
             #C:\Users\franc\AppData\Local\Google\Chrome\User Data\Default\Network
         ]
@@ -43,19 +48,24 @@ def apagar():
     else:
         print("Opción no válida. Inténtalo de nuevo.")
 
-while True:
-    close_vivaldi = input("¿Quieres apagar el ordenador? [S/N]: ").lower()
+def main():
+    userPath = obtenerRutaUsuario()
+    while True:
+        close_vivaldi = input("¿Quieres apagar el ordenador? [S/N]: ").lower()
 
-    if close_vivaldi == "s":
-        cerrar_aplicaciones()
-        borrar_cookies()
-        apagar()
-        break
+        if close_vivaldi == "s":
+            cerrar_aplicaciones()
+            borrar_cookies()
+            apagar()
+            break
 
-    elif close_vivaldi == "n":
-        print("Saliendo...")
-        time.sleep(1)
-        break
+        elif close_vivaldi == "n":
+            print("Saliendo...")
+            time.sleep(1)
+            break
 
-    else:
-        print("Opción no válida. Inténtalo de nuevo.")
+        else:
+            print("Opción no válida. Inténtalo de nuevo.")
+
+if __name__ == "__main__":
+    main()
