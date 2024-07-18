@@ -25,7 +25,7 @@ def cerrar_aplicaciones():
     print("Aplicaciones cerradas")
 
 
-#Probisional --> Autoencontrar archivo de Cookies
+#Provisional --> Autoencontrar archivo de Cookies
 ####################################################################################################################################
 def deleteJournalCookies(userPath):  #Cookies de navegacion
     print("Eliminando cookies...")
