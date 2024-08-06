@@ -171,7 +171,7 @@ while True:
         time.sleep(1)
         print("Saliendo...")
         time.sleep(1)
-        break
+        break 
 
     else:
         input("Opción no válida. Inténtalo de nuevo.")
