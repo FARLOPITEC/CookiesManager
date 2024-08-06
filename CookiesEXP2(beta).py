@@ -40,13 +40,17 @@ def seleccionar_navegador():
         navegador = "Todos"
     else:
         navegador = None
-        print("Navegador no válido")
-        return None
-    
+        print("Navegador no válido. Selecciona uno de los siguientes:")
+        return seleccionar_navegador()  # Volver a pedir selección
+
     return navegador
 
 # Cerramos el navegador seleccionado
 def cerrar_aplicaciones():
+    if navegador is None:
+        print("Navegador no seleccionado. No se pueden cerrar aplicaciones.")
+        return
+
     print("Cerrando aplicaciones...")
     if navegador in ["Vivaldi", "Todos"]:
         os.system("taskkill /F /IM vivaldi.exe")  # Cierra Vivaldi
@@ -87,15 +91,15 @@ def eliminar_cookies(userPath, tipo_cookies):
             ]
         }
 
-        for cookie_type in paths[tipo_cookies]:
-            if os.path.exists(cookie_type):
+        for cookie_file in paths[tipo_cookies]:
+            if os.path.exists(cookie_file):
                 try:
-                    os.remove(cookie_type)
-                    print(f"Archivo {cookie_type} eliminado.")
+                    os.remove(cookie_file)
+                    print(f"Archivo {cookie_file} eliminado.")
                 except Exception as e:
-                    print(f"Error al eliminar archivo {cookie_type}: {str(e)}")
+                    print(f"Error al eliminar archivo {cookie_file}: {str(e)}")
             else:
-                print(f"El archivo {cookie_type} no existe.")
+                print(f"El archivo {cookie_file} no existe.")
 
 # Función para explorar cookies
 def explorar_cookies(userPath, tipo_cookies):
@@ -241,54 +245,53 @@ def menuTipoCookies():
             os.system("cls" if os.name == "nt" else "clear")
 
 # Programa principal
-while True:
-    userPath = getUserPath()  # Ruta del usuario
-    os.system("cls" if os.name == "nt" else "clear")  # Limpiamos la consola
-    
-    shutdown = menuInicio()
-    navegador = seleccionar_navegador()  # Seleccionar navegador al inicio
+def main():
+    while True:
+        userPath = getUserPath()  # Ruta del usuario
+        os.system("cls" if os.name == "nt" else "clear")  # Limpiamos la consola
+        
+        shutdown = menuInicio()
+        
+        if shutdown == "6":
+            print("Saliendo...")
+            time.sleep(1)
+            break  # Salir del bucle principal
 
-    if navegador is None:
-        continue  # Volver al menú si el navegador no es válido
+        navegador = seleccionar_navegador()  # Seleccionar navegador al inicio
 
-    if shutdown == "1":
-        print("Apagando...")
-        time.sleep(1)
-        cerrar_aplicaciones()
-        tipo_cookies = menuTipoCookies()  # Elegir tipo de cookies
-        eliminar_cookies(userPath, tipo_cookies)
-        apagar()
-        break
+        if navegador is None:
+            continue  # Volver al menú si el navegador no es válido
 
-    elif shutdown == "2":
-        print("Borrando cookies...")
-        time.sleep(1)
-        cerrar_aplicaciones()
-        tipo_cookies = menuTipoCookies()  # Elegir tipo de cookies
-        eliminar_cookies(userPath, tipo_cookies)
-        break
+        if shutdown == "1":
+            print("Apagando...")
+            time.sleep(1)
+            cerrar_aplicaciones()
+            tipo_cookies = menuTipoCookies()  # Elegir tipo de cookies
+            eliminar_cookies(userPath, tipo_cookies)
+            apagar()
+            break
 
-    elif shutdown == "3":
-        print("Borrando datos de navegación...")
-        time.sleep(1)
-        cerrar_aplicaciones()
-        eliminar_cookies(userPath, "cookies de navegación")
-        break
+        elif shutdown == "2":
+            print("Borrando cookies...")
+            time.sleep(1)
+            cerrar_aplicaciones()
+            tipo_cookies = menuTipoCookies()  # Elegir tipo de cookies
+            eliminar_cookies(userPath, tipo_cookies)
+            break
 
-    elif shutdown == "4":
-        tipo_cookies = menuTipoCookies()  # Elegir tipo de cookies
-        explorar_cookies(userPath, tipo_cookies)
+        elif shutdown == "3":
+            print("Borrando datos de navegación...")
+            time.sleep(1)
+            cerrar_aplicaciones()
+            eliminar_cookies(userPath, "cookies de navegación")
+            break
 
-    elif shutdown == "5":
-        guardar_cookies(userPath)
+        elif shutdown == "4":
+            tipo_cookies = menuTipoCookies()  # Elegir tipo de cookies
+            explorar_cookies(userPath, tipo_cookies)
 
-    elif shutdown == "6":
-        print("3")
-        time.sleep(1)
-        print("2")
-        time.sleep(1)
-        print("1")
-        time.sleep(1)
-        print("Saliendo...")
-        time.sleep(1)
-        break
+        elif shutdown == "5":
+            guardar_cookies(userPath)
+        
+if __name__ == "__main__":
+    main()
