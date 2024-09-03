@@ -212,7 +212,7 @@ def apagar():
 def menuInicio():
     while True:
         print("Qué quieres hacer")
-        print("[1]. Apagar ordenador y borrar cookies")
+        print("[1]. Apagar ordenador y borrar cookies automatico")
         print("[2]. Borrar cookies")
         print("[3]. Borrar datos de navegación")
         print("[4]. Explorar cookies")
