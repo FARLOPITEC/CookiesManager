@@ -97,6 +97,11 @@ def eliminar_todas_cookies(userPath, nombre_navegador):
 
 # Función para explorar cookies
 def explorar_cookies(cookies):
+    if not cookies:
+        print("No se encontraron cookies.")
+        time.sleep(2)  # Pausa de 2 segundos para que el usuario vea el mensaje
+        return
+
     while True:
         print("1. Explorar cookies de sesión")
         print("2. Explorar todas las cookies")
@@ -109,14 +114,31 @@ def explorar_cookies(cookies):
             return
         else:
             print("Opción no válida. Inténtalo de nuevo.")
+
+    found_cookies = False
+    print("Presiona 'q' para dejar de explorar las cookies.")
     for cookie in cookies:
         if tipo == "1" and cookie.expires is None:
             print(cookie)
+            found_cookies = True
         elif tipo == "2":
             print(cookie)
+            found_cookies = True
+
+        if input() == 'q':
+            break
+
+    if not found_cookies:
+        print("No se encontraron cookies para la opción seleccionada.")
+        time.sleep(2)  # Pausa de 2 segundos para que el usuario vea el mensaje
 
 # Función para guardar cookies en una base de datos SQLite
 def guardar_cookies(cookies, nombre_navegador):
+    if not cookies:
+        print("No se encontraron cookies.")
+        time.sleep(2)  # Pausa de 2 segundos para que el usuario vea el mensaje
+        return
+
     root = Tk()
     root.withdraw()  # Ocultar la ventana principal de Tkinter
     db_path = asksaveasfilename(defaultextension=".db", filetypes=[("SQLite Database", "*.db")], title="Guardar cookies como")
@@ -124,6 +146,7 @@ def guardar_cookies(cookies, nombre_navegador):
 
     if not db_path:
         print("No se seleccionó ninguna ruta para guardar las cookies.")
+        time.sleep(2)  # Pausa de 2 segundos para que el usuario vea el mensaje
         return
 
     while True:
@@ -138,6 +161,7 @@ def guardar_cookies(cookies, nombre_navegador):
             return
         else:
             print("Opción no válida. Inténtalo de nuevo.")
+
     try:
         conn = sqlite3.connect(db_path)
         cursor = conn.cursor()
@@ -151,22 +175,31 @@ def guardar_cookies(cookies, nombre_navegador):
                 expires INTEGER
             )
         ''')
+
+        found_cookies = False
         for cookie in cookies:
             if tipo == "1" and cookie.expires is None:
                 cursor.execute('''
                     INSERT INTO cookies (name, value, domain, path, secure, expires)
                     VALUES (?, ?, ?, ?, ?, ?)
                 ''', (cookie.name, cookie.value, cookie.domain, cookie.path, cookie.secure, cookie.expires))
+                found_cookies = True
             elif tipo == "2":
                 cursor.execute('''
                     INSERT INTO cookies (name, value, domain, path, secure, expires)
                     VALUES (?, ?, ?, ?, ?, ?)
                 ''', (cookie.name, cookie.value, cookie.domain, cookie.path, cookie.secure, cookie.expires))
-        conn.commit()
+                found_cookies = True
+
+        if not found_cookies:
+            print("No se encontraron cookies para la opción seleccionada.")
+        else:
+            conn.commit()
+            print(f"Cookies de {nombre_navegador} guardadas en {db_path}.")
         conn.close()
-        print(f"Cookies de {nombre_navegador} guardadas en {db_path}.")
     except Exception as e:
         print(f"Error al guardar cookies: {e}")
+    time.sleep(2)  # Pausa de 2 segundos para que el usuario vea el mensaje
 
 # Función para apagar el ordenador
 def apagar():
@@ -205,6 +238,7 @@ def menuInicio():
                 apagar()
             else:
                 print("No se pudieron obtener las cookies.")
+                time.sleep(2)  # Pausa de 2 segundos para que el usuario vea el mensaje
         elif choice == "2":
             browser_choice = choose_browser()
             userPath = getUserPath()
@@ -214,6 +248,7 @@ def menuInicio():
                 eliminar_cookies(userPath, nombre_navegador, "cookies persistentes")
             else:
                 print("No se pudieron obtener las cookies.")
+                time.sleep(2)  # Pausa de 2 segundos para que el usuario vea el mensaje
         elif choice == "3":
             browser_choice = choose_browser()
             userPath = getUserPath()
@@ -223,6 +258,7 @@ def menuInicio():
                 eliminar_todas_cookies(userPath, nombre_navegador)
             else:
                 print("No se pudieron obtener las cookies.")
+                time.sleep(2)  # Pausa de 2 segundos para que el usuario vea el mensaje
         elif choice == "4":
             browser_choice = choose_browser()
             cookies, nombre_navegador = get_cookies(browser_choice)
@@ -230,6 +266,7 @@ def menuInicio():
                 explorar_cookies(cookies)
             else:
                 print("No se pudieron obtener las cookies.")
+                time.sleep(2)  # Pausa de 2 segundos para que el usuario vea el mensaje
         elif choice == "5":
             browser_choice = choose_browser()
             cookies, nombre_navegador = get_cookies(browser_choice)
@@ -237,12 +274,13 @@ def menuInicio():
                 guardar_cookies(cookies, nombre_navegador)
             else:
                 print("No se pudieron obtener las cookies.")
+                time.sleep(2)  # Pausa de 2 segundos para que el usuario vea el mensaje
         elif choice == "6":
             print("Saliendo...")
             break
         else:
             print("Opción no válida.")
-            time.sleep(1)
+            time.sleep(2)  # Pausa de 2 segundos para que el usuario vea el mensaje
             limpiar_pantalla()
 
 if __name__ == "__main__":
