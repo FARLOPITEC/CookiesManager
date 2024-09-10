@@ -1,5 +1,6 @@
 import browser_cookie3 # type: ignore
 import os
+import platform
 import time
 from pathlib import Path
 import sqlite3
@@ -16,16 +17,21 @@ def getUserPath():
 
 # Función para seleccionar navegador
 def choose_browser():
-    print("LISTA NAVEGADORES")
-    print("[1] Chrome")
-    print("[2] Firefox")
-    print("[3] Opera")
-    print("[4] Opera GX")
-    print("[5] Vivaldi")
-    print("[6] Brave")
-    print("[7] Todos")
-    browser_choose = input("--> ")
-    return browser_choose
+    while True:
+        print("LISTA NAVEGADORES")
+        print("[1] Chrome")
+        print("[2] Firefox")
+        print("[3] Opera")
+        print("[4] Opera GX")
+        print("[5] Vivaldi")
+        print("[6] Brave")
+        print("[7] Todos")
+        print("[8] Volver al menú principal")
+        browser_choose = input("--> ")
+        if browser_choose in ["1", "2", "3", "4", "5", "6", "7", "8"]:
+            return browser_choose
+        else:
+            print("Opción no válida. Inténtalo de nuevo.")
 
 # Función para obtener cookies del navegador seleccionado
 def get_cookies(browser_choose):
@@ -61,24 +67,45 @@ def get_cookies(browser_choose):
 
 # Función para cerrar aplicaciones del navegador
 def cerrar_aplicaciones(nombre_navegador):
-    if nombre_navegador == "Chrome":
-        os.system("taskkill /IM chrome.exe /F")
-    elif nombre_navegador == "Firefox":
-        os.system("taskkill /IM firefox.exe /F")
-    elif nombre_navegador == "Opera":
-        os.system("taskkill /IM opera.exe /F")
-    elif nombre_navegador == "Opera GX":
-        os.system("taskkill /IM opera.exe /F")
-    elif nombre_navegador == "Vivaldi":
-        os.system("taskkill /IM vivaldi.exe /F")
-    elif nombre_navegador == "Brave":
-        os.system("taskkill /IM brave.exe /F")
-    elif nombre_navegador == "Todos":
-        os.system("taskkill /IM chrome.exe /F")
-        os.system("taskkill /IM firefox.exe /F")
-        os.system("taskkill /IM opera.exe /F")
-        os.system("taskkill /IM vivaldi.exe /F")
-        os.system("taskkill /IM brave.exe /F")
+    os_name = platform.system()
+    if os_name == "Windows":
+        if nombre_navegador == "Chrome":
+            os.system("taskkill /IM chrome.exe /F")
+        elif nombre_navegador == "Firefox":
+            os.system("taskkill /IM firefox.exe /F")
+        elif nombre_navegador == "Opera":
+            os.system("taskkill /IM opera.exe /F")
+        elif nombre_navegador == "Opera GX":
+            os.system("taskkill /IM opera.exe /F")
+        elif nombre_navegador == "Vivaldi":
+            os.system("taskkill /IM vivaldi.exe /F")
+        elif nombre_navegador == "Brave":
+            os.system("taskkill /IM brave.exe /F")
+        elif nombre_navegador == "Todos":
+            os.system("taskkill /IM chrome.exe /F")
+            os.system("taskkill /IM firefox.exe /F")
+            os.system("taskkill /IM opera.exe /F")
+            os.system("taskkill /IM vivaldi.exe /F")
+            os.system("taskkill /IM brave.exe /F")
+    elif os_name == "Linux":
+        if nombre_navegador == "Chrome":
+            os.system("pkill chrome")
+        elif nombre_navegador == "Firefox":
+            os.system("pkill firefox")
+        elif nombre_navegador == "Opera":
+            os.system("pkill opera")
+        elif nombre_navegador == "Opera GX":
+            os.system("pkill opera")
+        elif nombre_navegador == "Vivaldi":
+            os.system("pkill vivaldi")
+        elif nombre_navegador == "Brave":
+            os.system("pkill brave")
+        elif nombre_navegador == "Todos":
+            os.system("pkill chrome")
+            os.system("pkill firefox")
+            os.system("pkill opera")
+            os.system("pkill vivaldi")
+            os.system("pkill brave")
 
 # Función para eliminar cookies
 def eliminar_cookies(userPath, nombre_navegador, tipo):
@@ -105,32 +132,26 @@ def explorar_cookies(cookies):
     while True:
         print("1. Explorar cookies de sesión")
         print("2. Explorar todas las cookies")
-        print("3. Volver al menú principal")
+        print("q. Volver al menú principal")
         tipo = input("Elige una opción: ")
 
         if tipo == "1" or tipo == "2":
-            break
-        elif tipo == "3":
+            found_cookies = False
+            for cookie in cookies:
+                if tipo == "1" and cookie.expires is None:
+                    print(cookie)
+                    found_cookies = True
+                elif tipo == "2":
+                    print(cookie)
+                    found_cookies = True
+
+            if not found_cookies:
+                print("No se encontraron cookies para la opción seleccionada.")
+                time.sleep(2)  # Pausa de 2 segundos para que el usuario vea el mensaje
+        elif tipo == "q":
             return
         else:
             print("Opción no válida. Inténtalo de nuevo.")
-
-    found_cookies = False
-    print("Presiona 'q' para dejar de explorar las cookies.")
-    for cookie in cookies:
-        if tipo == "1" and cookie.expires is None:
-            print(cookie)
-            found_cookies = True
-        elif tipo == "2":
-            print(cookie)
-            found_cookies = True
-
-        if input() == 'q':
-            break
-
-    if not found_cookies:
-        print("No se encontraron cookies para la opción seleccionada.")
-        time.sleep(2)  # Pausa de 2 segundos para que el usuario vea el mensaje
 
 # Función para guardar cookies en una base de datos SQLite
 def guardar_cookies(cookies, nombre_navegador):
@@ -230,6 +251,8 @@ def menuInicio():
 
         if choice == "1":
             browser_choice = choose_browser()
+            if browser_choice == "8":
+                continue
             userPath = getUserPath()
             cookies, nombre_navegador = get_cookies(browser_choice)
             if cookies:
@@ -241,6 +264,8 @@ def menuInicio():
                 time.sleep(2)  # Pausa de 2 segundos para que el usuario vea el mensaje
         elif choice == "2":
             browser_choice = choose_browser()
+            if browser_choice == "8":
+                continue
             userPath = getUserPath()
             cookies, nombre_navegador = get_cookies(browser_choice)
             if cookies:
@@ -251,6 +276,8 @@ def menuInicio():
                 time.sleep(2)  # Pausa de 2 segundos para que el usuario vea el mensaje
         elif choice == "3":
             browser_choice = choose_browser()
+            if browser_choice == "8":
+                continue
             userPath = getUserPath()
             cookies, nombre_navegador = get_cookies(browser_choice)
             if cookies:
@@ -261,7 +288,10 @@ def menuInicio():
                 time.sleep(2)  # Pausa de 2 segundos para que el usuario vea el mensaje
         elif choice == "4":
             browser_choice = choose_browser()
+            if browser_choice == "8":
+                continue
             cookies, nombre_navegador = get_cookies(browser_choice)
+            
             if cookies:
                 explorar_cookies(cookies)
             else:
@@ -269,6 +299,8 @@ def menuInicio():
                 time.sleep(2)  # Pausa de 2 segundos para que el usuario vea el mensaje
         elif choice == "5":
             browser_choice = choose_browser()
+            if browser_choice == "8":
+                continue
             cookies, nombre_navegador = get_cookies(browser_choice)
             if cookies:
                 guardar_cookies(cookies, nombre_navegador)
@@ -277,6 +309,7 @@ def menuInicio():
                 time.sleep(2)  # Pausa de 2 segundos para que el usuario vea el mensaje
         elif choice == "6":
             print("Saliendo...")
+            time.sleep(2)  # Pausa de 2 segundos para que el usuario vea el mensaje
             break
         else:
             print("Opción no válida.")
