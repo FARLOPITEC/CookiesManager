@@ -1,4 +1,4 @@
-# Versión: 0.2
+# Versión: 0.5
 # Autor: Francisco Fernández Fernández
 
 
