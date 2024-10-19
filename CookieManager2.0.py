@@ -383,8 +383,37 @@ def main():
             input("Presiona ENTER para continuar...")
             limpiar_pantalla()
 
+        elif choice == "3":
+            browser_choice = choose_browser()
+            if browser_choice is None:
+                continue
 
-        elif choice in [ "3", "4", "5", "6", "7"]:
+            # Cerrar navegador
+            if isinstance(browser_choice, list):
+                for browser in browser_choice:
+                    if is_browser_open(browser):
+                        close_browser(browser)
+            else:
+                if is_browser_open(browser_choice):
+                    close_browser(browser_choice)
+
+            # Borrar cookies
+            if isinstance(browser_choice, list):
+                for browser in browser_choice:
+                    delete_session_cookies(browser)
+            
+            # Borrar historial
+            if isinstance(browser_choice, list):
+                for browser in browser_choice:
+                    delete_session_history(browser)
+            else:
+                delete_session_history(browser_choice)
+
+            print("Proceso completado.")
+            input("Presiona ENTER para continuar...")
+            limpiar_pantalla()
+
+        elif choice in [ "4", "5", "6", "7"]:
             input("En desarrollo...")
 
         else:
