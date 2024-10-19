@@ -1,28 +1,10 @@
-# Versión: 0.5
+# Versión: 1.5
 # Autor: Francisco Fernández Fernández
 
 
 import importlib
 import itertools
 import subprocess
-
-
-def check_and_install_libraries():  # Comprobar e instalar librerías necesarias
-    libraries = ["psutil", "browser_cookie3"]
-    for lib in libraries:
-        try:
-            importlib.import_module(lib)
-        except ImportError:
-            install = input(f"La librería {lib} no está instalada. ¿Quieres instalarla? (s/n): ").strip().lower()
-            if install == 's':
-                subprocess.check_call([sys.executable, "-m", "pip", "install", lib])
-            else:
-                print(f"La librería {lib} es necesaria para el funcionamiento del script. Saliendo...")
-                exit(1)
-
-check_and_install_libraries()  # Comprobar e instalar librerías necesarias
-print("Librerías instaladas correctamente.\n\n")
-
 import platform     # librería para obtener el sistema operativo
 import sys
 import threading
@@ -33,6 +15,24 @@ from pathlib import Path
 from tkinter import Tk
 from tkinter.filedialog import asksaveasfilename
 
+# Comprobar e instalar librerías necesarias
+#--------------------------------------------------------------------------------------------------------------
+def check_and_install_libraries():  
+    libraries = ["psutil"]
+    for lib in libraries:
+        try:
+            importlib.import_module(lib)
+        except ImportError:
+            install = input(f"La librería {lib} no está instalada. ¿Quieres instalarla? [Y/N]: ").strip().lower()
+            if install == 's' or install == 'y':
+                subprocess.check_call([sys.executable, "-m", "pip", "install", lib])
+            else:
+                print(f"La librería {lib} es necesaria para el funcionamiento del script. Saliendo...")
+                exit(1)
+
+check_and_install_libraries()  # Comprobar e instalar librerías necesarias
+print("Librerías instaladas correctamente.\n\n")
+#--------------------------------------------------------------------------------------------------------------
 
 # Función para limpiar la pantalla
 def limpiar_pantalla():
@@ -42,10 +42,25 @@ def limpiar_pantalla():
 def getUserPath():
     return str(Path.home())
 
+# Función para la animación de carga
+def loading_animation():
+    stop_loading = False
+    def animate():
+        nonlocal stop_loading
+        for c in itertools.cycle(['/', '\\']):
+            if stop_loading:
+                break
+            print(c, end='\r')
+            time.sleep(0.3)
+    t = threading.Thread(target=animate)
+    t.start()
+    time.sleep(2)
+    stop_loading = True
+    t.join()
+
 # Función para elegir el navegador
 def choose_browser():
     print("Elige un navegador:")
-    print("___________________")
     print("1. Chrome")
     print("2. Firefox")
     print("3. Edge")
@@ -56,8 +71,27 @@ def choose_browser():
     print("8. Todos los navegadores")
     print("9. Volver al menú principal")
     choice = input("/-->: ").strip()
-    browsers = { "1": "Chrome", "2": "Firefox", "3": "Edge", "4": "Opera", "5": "Opera GX", "6": "Vivaldi", "7": "Brave", "8": [ "Chrome", "Firefox", "Edge", "Opera", "Opera GX", "Vivaldi", "Brave"]}
-    return browsers.get(choice, None)
+    if choice == "1":
+        return "Chrome"
+    elif choice == "2":
+        return "Firefox"
+    elif choice == "3":
+        return "Edge"
+    elif choice == "4":
+        return "Opera"
+    elif choice == "5":
+        return "Opera GX"
+    elif choice == "6":
+        return "Vivaldi"
+    elif choice == "7":
+        return "Brave"
+    elif choice == "8":
+        return ["Chrome", "Firefox", "Edge", "Opera", "Opera GX", "Vivaldi", "Brave"]
+    elif choice == "9":
+        return None
+    else:
+        print("Opción no válida.")
+        return choose_browser()
 
 # Función para comprobar si el navegador está abierto
 def is_browser_open(browser_name):
@@ -80,8 +114,8 @@ def is_browser_open(browser_name):
                 print(f"{browser_name} está abierto.")
                 return [browser_name]
         print(f"{browser_name} no está abierto.")
-        return []
-# 1ª ley del programador: Si funciona aunque no sepas el xq, no lo toques.
+        return []   
+
 # Función para cerrar el navegador
 def close_browser(browser_name):
     def question(browser): 
@@ -103,48 +137,183 @@ def close_browser(browser_name):
     else:
         question(browser_name)
 
-# Función para eliminar cookies de
-def delete_session_cookies():
-    def browser_path(browser):
-        os_system = platform.system() # platform.system --> librería para obtener el sistema operativo
-        if os_system == "Windows":
-            if browser == "Chrome":
-                return getUserPath() + r"\\AppData\\Local\\Google\\Chrome\\User Data\\Default\\Network" #(Cookies, Cookies-journal)
-            elif browser == "Firefox":
-                return getUserPath() + r"\\AppData\\Roaming\\Mozilla\\Firefox\\Profiles\\tng6xnez.default-release\\cookies.sqlite" #(cookies.sqlite) tanto persistentes como de sesión
-            elif browser == "Edge":
-                return getUserPath() + r"\\AppData\\Local\\Microsoft\\Edge\\User Data\Default" # Comprobar
-            elif browser == "Opera":
-                return getUserPath() + r"\\AppData\\Roaming\\Opera Software\\Opera Stable" # Comprobar
-            elif browser == "Opera GX":
-                return getUserPath() + r"\\AppData\\Roaming\\Opera Software\\Opera GX Stable" # Comprobar
-            elif browser == "Vivaldi":
-                return getUserPath() + r"\\AppData\\Local\\Vivaldi\\User Data\\Default\\Network" #(Cookies, Cookies-journal) 
-            elif browser == "Brave":
-                return getUserPath() + r"\\AppData\\Local\\BraveSoftware\\Brave-Browser\\User Data\\Default\\Network\\" #(Cookies, Cookies-journal)
-            else:
-                return None
-                
-        elif os_system == "Linux":
-            print("En desarollo")
-        elif os_system == "Darwin":
-            print("En desarollo")
-        else:
-            print(f"Estás usando un sistema operativo desconocido: {os_system}")
 
-
-
+# Función para obtener la ruta de las cookies del navegador
+def browser_path_cookies(browser):
+    os_system = platform.system()
+    user_path = getUserPath()
     
-# añadir script q elimine datos de navegación (History, caché, Visited Links, etc)
+    if os_system == "Windows":
+        if browser == "Chrome":
+            return user_path + r"\AppData\Local\Google\Chrome\User Data\Default\Network\Cookies"
+        elif browser == "Firefox":
+            return user_path + r"\AppData\Roaming\Mozilla\Firefox\Profiles\tng6xnez.default-release\cookies.sqlite"
+        elif browser == "Edge":
+            return user_path + r"\AppData\Local\Microsoft\Edge\User Data\Default\Cookies" # X comprobar    #Mejor no uses Edge 🤢🤮
+        elif browser == "Opera":
+            return user_path + r"\AppData\Roaming\Opera Software\Opera Stable\Cookies" # X comprobar 
+        elif browser == "Opera GX":
+            return user_path + r"\AppData\Roaming\Opera Software\Opera GX Stable\Cookies" # X comprobar
+        elif browser == "Vivaldi":
+            return user_path + r"\AppData\Local\Vivaldi\User Data\Default\Network\Cookies"
+        elif browser == "Brave":
+            return user_path + r"\AppData\Local\BraveSoftware\Brave-Browser\User Data\Default\Network\Cookies"
+        else:
+            return None
+    elif os_system == "Linux":
+        print("En desarrollo...")
+    elif os_system == "Darwin":
+        print("En desarrollo...")
+    else:
+        print(f"Estás usando un sistema operativo desconocido: {os_system}")
+  
+# Función para eliminar las cookies de sesión del navegador
+def delete_session_cookies(browser):
+    try:
+        os_system = platform.system()
+        
+        if isinstance(browser, list):
+            for b in browser:
+                cookie_path = browser_path_cookies(b)
+                if cookie_path is None:
+                    print(f"Navegador {b} no soportado.")
+                    continue
+                
+                if os_system == "Windows":
+                    if os.path.exists(cookie_path):
+                        subprocess.run(['del', cookie_path], shell=True, check=True)
+                        print("Cookies eliminadas con éxito")
+                    else:
+                        print(f"No se pudo encontrar {cookie_path}.")
+                elif os_system == "Linux":
+                    if os.path.exists(cookie_path):
+                        subprocess.run(['rm', cookie_path], check=True)
+                        print("Cookies eliminadas con éxito")
+                    else:
+                        print(f"No se pudo encontrar {cookie_path}.")
+                elif os_system == "Darwin":
+                    print("En desarrollo...")
+                else:
+                    print(f"Estás usando un sistema operativo desconocido: {os_system}")
+        else:
+            cookie_path = browser_path_cookies(browser)
+            if cookie_path is None:
+                print(f"Navegador {browser} no soportado.")
+                return
+            
+            if os_system == "Windows":
+                if os.path.exists(cookie_path):
+                    subprocess.run(['del', cookie_path], shell=True, check=True)
+                    print("Cookies eliminadas con éxito")
+                else:
+                    print(f"No se pudo encontrar {cookie_path}.")
+            elif os_system == "Linux":
+                if os.path.exists(cookie_path):
+                    subprocess.run(['rm', cookie_path], check=True)
+                    print("Cookies eliminadas con éxito")
+                else:
+                    print(f"No se pudo encontrar {cookie_path}.")
+            elif os_system == "Darwin":
+                print("En desarrollo...")
+            else:
+                print(f"Estás usando un sistema operativo desconocido: {os_system}")
+    except Exception as e:
+        print(f"Error: {e}")
+
+
+ 
+# Función para eliminar el historial
+def browser_path_history(browser):
+    os_system = platform.system()
+    user_path = getUserPath()
+    
+    if os_system == "Windows":
+        if browser == "Chrome":
+            return user_path + r"\AppData\Local\Google\Chrome\User Data\Default\History"
+        elif browser == "Firefox":
+            return user_path + r"\AppData\Roaming\Mozilla\Firefox\Profiles\places.sqlite"
+        elif browser == "Edge":
+            return user_path + r"\AppData\Local\Microsoft\Edge\User Data\Default\History" # X comprobar   #Mejor no uses Edge 🤢🤮
+        elif browser == "Opera":
+            return user_path + r"\AppData\Roaming\Opera Software\Opera Stable\History" # X comprobar
+        elif browser == "Opera GX":
+            return user_path + r"\AppData\Roaming\Opera Software\Opera GX Stable\History" # X comprobar
+        elif browser == "Vivaldi":
+            return user_path + r"\AppData\Local\Vivaldi\User Data\Default\History"
+        elif browser == "Brave":
+            return user_path + r"\AppData\Local\BraveSoftware\Brave-Browser\User Data\Default\History"
+        else:
+            return None
+    elif os_system == "Linux":
+        print("En desarrollo...")
+    elif os_system == "Darwin":
+        print("En desarrollo...")
+    else:
+        print(f"Estás usando un sistema operativo desconocido: {os_system}")
+
+
+# Función para eliminar el historial de navegación
+def delete_session_history(browser):
+    try:
+        os_system = platform.system()
+        
+        if isinstance(browser, list):
+            for b in browser:
+                cookie_path = delete_session_history(b)
+                if cookie_path is None:
+                    print(f"Navegador {b} no soportado.")
+                    continue
+                
+                if os_system == "Windows":
+                    if os.path.exists(cookie_path):
+                        subprocess.run(['del', cookie_path], shell=True, check=True)
+                        print("Cookies eliminadas con éxito")
+                    else:
+                        print(f"No se pudo encontrar {cookie_path}.")
+                elif os_system == "Linux":
+                    if os.path.exists(cookie_path):
+                        subprocess.run(['rm', cookie_path], check=True)
+                        print("Cookies eliminadas con éxito")
+                    else:
+                        print(f"No se pudo encontrar {cookie_path}.")
+                elif os_system == "Darwin":
+                    print("En desarrollo...")
+                else:
+                    print(f"Estás usando un sistema operativo desconocido: {os_system}")
+        else:
+            cookie_path = delete_session_history(browser)
+            if cookie_path is None:
+                print(f"Navegador {browser} no soportado.")
+                return
+            
+            if os_system == "Windows":
+                if os.path.exists(cookie_path):
+                    subprocess.run(['del', cookie_path], shell=True, check=True)
+                    print("Cookies eliminadas con éxito")
+                else:
+                    print(f"No se pudo encontrar {cookie_path}.")
+            elif os_system == "Linux":
+                if os.path.exists(cookie_path):
+                    subprocess.run(['rm', cookie_path], check=True)
+                    print("Cookies eliminadas con éxito")
+                else:
+                    print(f"No se pudo encontrar {cookie_path}.")
+            elif os_system == "Darwin":
+                print("En desarrollo...")
+            else:
+                print(f"Estás usando un sistema operativo desconocido: {os_system}")
+    except Exception as e:
+        print(f"Error: {e}")
 
 # Función principal del menú
 def main():
     while True:
-        print("      COOKIES MANAGER")
-        print("      MENU PRINCIPAL")
-        print("_______________________________")
+        print("╔══════════════════════════════╗")
+        print("║       COOKIES MANAGER        ║")   
+        print("║        MENU PRINCIPAL        ║")
+        print("╚══════════════════════════════╝\n")
         print("1. Eliminar cookies")
-        print("2. Eliminar datos de navegación")
+        print("2. Eliminar historial de navegación")
         print("3. Eliminar todo")
         print("4. Explorar tokens de inicio de sesión")
         print("5. Explorar cookies")
@@ -164,6 +333,8 @@ def main():
             browser_choice = choose_browser()
             if browser_choice is None:
                 continue
+
+            # Cerrar navegador
             if isinstance(browser_choice, list):
                 for browser in browser_choice:
                     if is_browser_open(browser):
@@ -171,35 +342,54 @@ def main():
             else:
                 if is_browser_open(browser_choice):
                     close_browser(browser_choice)
-            input("Presiona Enter para continuar...")
-            
 
-        elif choice in ["2", "3", "4", "5", "6", "7"]:
+            # Borrar cookies
+            if isinstance(browser_choice, list):
+                for browser in browser_choice:
+                    delete_session_cookies(browser)
+                    
+            else:
+                delete_session_cookies(browser_choice)
+                
+            print("Proceso completado.")
+            input("Presiona ENTER para continuar...")
+            limpiar_pantalla()
+
+        elif choice == "2":
+            browser_choice = choose_browser()
+            if browser_choice is None:
+                continue
+
+            # Cerrar navegador
+            if isinstance(browser_choice, list):
+                for browser in browser_choice:
+                    if is_browser_open(browser):
+                        close_browser(browser)
+            else:
+                if is_browser_open(browser_choice):
+                    close_browser(browser_choice)
+
+            # Borrar historial
+            if isinstance(browser_choice, list):
+                for browser in browser_choice:
+                    delete_session_history(browser)
+            else:
+                delete_session_history(browser_choice)
+
+            print("Proceso completado.")
+            input("Presiona ENTER para continuar...")
+            limpiar_pantalla()
+
+
+        elif choice in [ "3", "4", "5", "6", "7"]:
             input("En desarrollo...")
 
         else:
             input(f"Opción [{choice}] no válida. ENTER para intentar de nuevo.")
             limpiar_pantalla()
 
+        
 
-
-
-
-# Animación de salida
-def loading_animation():
-    stop_loading = False
-    def animate():
-        nonlocal stop_loading
-        for c in itertools.cycle(['/', '\\']):
-            if stop_loading:
-                break
-            print(c, end='\r')
-            time.sleep(0.5)
-    t = threading.Thread(target=animate)
-    t.start()
-    time.sleep(2)
-    stop_loading = True
-    t.join()
 
 # Punto de entrada del script
 if __name__ == "__main__":
@@ -211,9 +401,12 @@ if __name__ == "__main__":
         time.sleep(1)
         limpiar_pantalla()
         exit(0)
+
+#Comentado para registrar los errores a corregir   
     except Exception as e:
         print(f"Error: {e}")
         print("Saliendo...")
         time.sleep(1)
         limpiar_pantalla()
         exit(1)
+    
