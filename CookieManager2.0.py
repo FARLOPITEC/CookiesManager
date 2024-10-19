@@ -1,4 +1,4 @@
-# Versión: 1.5
+# Versión: 0.9
 # Autor: Francisco Fernández Fernández
 
 
@@ -60,7 +60,10 @@ def loading_animation():
 
 # Función para elegir el navegador
 def choose_browser():
-    print("Elige un navegador:")
+    print("╔══════════════════════════════╗")
+    print("║       COOKIES MANAGER        ║")   
+    print("║      ELIGE UN NAVEGADOR      ║")
+    print("╚══════════════════════════════╝\n")
     print("1. Chrome")
     print("2. Firefox")
     print("3. Edge")
