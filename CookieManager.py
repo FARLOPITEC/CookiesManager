@@ -1,6 +1,5 @@
-# Versión: 0.9
+# Versión: 1.8
 # Autor: Francisco Fernández Fernández
-
 
 import importlib
 import itertools
@@ -31,7 +30,7 @@ def check_and_install_libraries():
                 exit(1)
 
 check_and_install_libraries()  # Comprobar e instalar librerías necesarias
-print("Librerías instaladas correctamente.\n\n")
+print("⭐Librerías instaladas correctamente.\n")
 #--------------------------------------------------------------------------------------------------------------
 
 # Función para limpiar la pantalla
@@ -64,6 +63,7 @@ def choose_browser():
     print("║       COOKIES MANAGER        ║")   
     print("║      ELIGE UN NAVEGADOR      ║")
     print("╚══════════════════════════════╝\n")
+    print("⭐ Elige un navegador:")
     print("1. Chrome")
     print("2. Firefox")
     print("3. Edge")
@@ -332,7 +332,10 @@ def main():
             limpiar_pantalla()
             break
 
-        elif choice == "1":
+        elif choice == "1": # Eliminar cookies
+            print("╔══════════════════════════════╗")
+            print("║       Eliminar cookies       ║")
+            print("╚══════════════════════════════╝")
             browser_choice = choose_browser()
             if browser_choice is None:
                 continue
@@ -358,7 +361,10 @@ def main():
             input("Presiona ENTER para continuar...")
             limpiar_pantalla()
 
-        elif choice == "2":
+        elif choice == "2": # Eliminar historial
+            print("╔══════════════════════════════╗")
+            print("║      Eliminanr historial     ║")
+            print("╚══════════════════════════════╝")
             browser_choice = choose_browser()
             if browser_choice is None:
                 continue
@@ -383,7 +389,10 @@ def main():
             input("Presiona ENTER para continuar...")
             limpiar_pantalla()
 
-        elif choice == "3":
+        elif choice == "3": # Eliminar cookies e historial
+            print("╔══════════════════════════════╗")
+            print("║ Eliminar cookies y historial ║")
+            print("╚══════════════════════════════╝")
             browser_choice = choose_browser()
             if browser_choice is None:
                 continue
@@ -391,7 +400,7 @@ def main():
             # Cerrar navegador
             if isinstance(browser_choice, list):
                 for browser in browser_choice:
-                    if is_browser_open(browser):
+                    if is_browser_open(browser):  
                         close_browser(browser)
             else:
                 if is_browser_open(browser_choice):
