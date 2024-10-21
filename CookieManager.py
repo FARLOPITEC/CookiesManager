@@ -227,8 +227,8 @@ def delete_session_cookies(browser):
  
 # Función para eliminar el historial
 def browser_path_history(browser):
+    user_path = os.path.expanduser("~")
     os_system = platform.system()
-    user_path = getUserPath()
     
     if os_system == "Windows":
         if browser == "Chrome":
@@ -262,21 +262,23 @@ def delete_session_history(browser):
         
         if isinstance(browser, list):
             for b in browser:
-                history_path = delete_session_history(b)
+                history_path = browser_path_history(b)
                 if history_path is None:
                     print(f"Navegador {b} no soportado.")
                     continue
                 
+                close_browser(b)  # Cerrar el navegador antes de eliminar el historial
+                
                 if os_system == "Windows":
                     if os.path.exists(history_path):
-                        subprocess.run(['del', history_path], shell=True, check=True)
-                        print("Cookies eliminadas con éxito")
+                        os.remove(history_path)
+                        print("Historial eliminado con éxito")
                     else:
                         print(f"No se pudo encontrar {history_path}.")
                 elif os_system == "Linux":
                     if os.path.exists(history_path):
-                        subprocess.run(['rm', history_path], check=True)
-                        print("Cookies eliminadas con éxito")
+                        os.remove(history_path)
+                        print("Historial eliminado con éxito")
                     else:
                         print(f"No se pudo encontrar {history_path}.")
                 elif os_system == "Darwin":
@@ -284,21 +286,23 @@ def delete_session_history(browser):
                 else:
                     print(f"Estás usando un sistema operativo desconocido: {os_system}")
         else:
-            history_path = delete_session_history(browser)
+            history_path = browser_path_history(browser)
             if history_path is None:
                 print(f"Navegador {browser} no soportado.")
                 return
             
+            close_browser(browser)  # Cerrar el navegador antes de eliminar el historial
+            
             if os_system == "Windows":
                 if os.path.exists(history_path):
-                    subprocess.run(['del', history_path], shell=True, check=True)
-                    print("Cookies eliminadas con éxito")
+                    os.remove(history_path)
+                    print("Historial eliminado con éxito")
                 else:
                     print(f"No se pudo encontrar {history_path}.")
             elif os_system == "Linux":
                 if os.path.exists(history_path):
-                    subprocess.run(['rm', history_path], check=True)
-                    print("Cookies eliminadas con éxito")
+                    os.remove(history_path)
+                    print("Historial eliminado con éxito")
                 else:
                     print(f"No se pudo encontrar {history_path}.")
             elif os_system == "Darwin":
@@ -392,7 +396,7 @@ def main():
 
         elif choice == "3": # Eliminar cookies e historial
             print("╔══════════════════════════════╗")
-            print("║ Eliminar cookies y historial ║")
+            print("║ Eliminar cookies e historial ║")
             print("╚══════════════════════════════╝")
             browser_choice = choose_browser()
             if browser_choice is None:
@@ -431,8 +435,6 @@ def main():
             limpiar_pantalla()
 
         
-
-
 # Punto de entrada del script
 if __name__ == "__main__":
     try:
