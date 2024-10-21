@@ -262,45 +262,45 @@ def delete_session_history(browser):
         
         if isinstance(browser, list):
             for b in browser:
-                cookie_path = delete_session_history(b)
-                if cookie_path is None:
+                history_path = delete_session_history(b)
+                if history_path is None:
                     print(f"Navegador {b} no soportado.")
                     continue
                 
                 if os_system == "Windows":
-                    if os.path.exists(cookie_path):
-                        subprocess.run(['del', cookie_path], shell=True, check=True)
+                    if os.path.exists(history_path):
+                        subprocess.run(['del', history_path], shell=True, check=True)
                         print("Cookies eliminadas con éxito")
                     else:
-                        print(f"No se pudo encontrar {cookie_path}.")
+                        print(f"No se pudo encontrar {history_path}.")
                 elif os_system == "Linux":
-                    if os.path.exists(cookie_path):
-                        subprocess.run(['rm', cookie_path], check=True)
+                    if os.path.exists(history_path):
+                        subprocess.run(['rm', history_path], check=True)
                         print("Cookies eliminadas con éxito")
                     else:
-                        print(f"No se pudo encontrar {cookie_path}.")
+                        print(f"No se pudo encontrar {history_path}.")
                 elif os_system == "Darwin":
                     print("En desarrollo...")
                 else:
                     print(f"Estás usando un sistema operativo desconocido: {os_system}")
         else:
-            cookie_path = delete_session_history(browser)
-            if cookie_path is None:
+            history_path = delete_session_history(browser)
+            if history_path is None:
                 print(f"Navegador {browser} no soportado.")
                 return
             
             if os_system == "Windows":
-                if os.path.exists(cookie_path):
-                    subprocess.run(['del', cookie_path], shell=True, check=True)
+                if os.path.exists(history_path):
+                    subprocess.run(['del', history_path], shell=True, check=True)
                     print("Cookies eliminadas con éxito")
                 else:
-                    print(f"No se pudo encontrar {cookie_path}.")
+                    print(f"No se pudo encontrar {history_path}.")
             elif os_system == "Linux":
-                if os.path.exists(cookie_path):
-                    subprocess.run(['rm', cookie_path], check=True)
+                if os.path.exists(history_path):
+                    subprocess.run(['rm', history_path], check=True)
                     print("Cookies eliminadas con éxito")
                 else:
-                    print(f"No se pudo encontrar {cookie_path}.")
+                    print(f"No se pudo encontrar {history_path}.")
             elif os_system == "Darwin":
                 print("En desarrollo...")
             else:
@@ -315,6 +315,7 @@ def main():
         print("║       COOKIES MANAGER        ║")   
         print("║        MENU PRINCIPAL        ║")
         print("╚══════════════════════════════╝\n")
+        print("⭐ Que quieres hacer:")
         print("1. Eliminar cookies")
         print("2. Eliminar historial de navegación")
         print("3. Eliminar todo")
