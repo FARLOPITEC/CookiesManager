@@ -56,7 +56,6 @@ pip install psutil
 
 ## 🎨 User Interface
 
-![App Screenshot](https://your-image-url.com)  
 *A simple, intuitive interface to manage your cookies and history with just a few clicks.*
 
 ## 🛠️ Built With
