@@ -55,7 +55,6 @@ pip install psutil
 
 ## 🎨 Interfaz de Usuario
 
-![Captura de Pantalla de la App](https://your-image-url.com)  
 *Una interfaz simple e intuitiva para gestionar tus cookies e historial con solo unos clics.*
 
 ## 🛠️ Construido con
