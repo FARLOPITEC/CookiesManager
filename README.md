@@ -1,3 +1,4 @@
+
 # Cookies & History Manager 🍪🕑
 
 A cross-platform application to manage and delete browser cookies and history with ease.
@@ -21,3 +22,58 @@ Make sure you have the following installed:
 To manually install `psutil`, run:
 ```bash
 pip install psutil
+```
+
+### Installation
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/yourusername/CookiesManager.git
+   ```
+2. Navigate to the project directory:
+   ```bash
+   cd CookiesManager
+   ```
+3. Run the application:
+   ```bash
+   python manage_cookies.py
+   ```
+
+## 🌐 Supported Browsers
+
+| Browser    | Cookies Support | History Support |
+|------------|-----------------|-----------------|
+| Chrome     | ✅               | ✅               |
+| Firefox    | ✅               | ✅               |
+| Edge       | ✅               | ✅               |
+| Opera      | ✅               | ✅               |
+| Brave      | ✅               | ✅               |
+| Vivaldi    | ✅               | ✅               |
+
+## 🎨 User Interface
+
+![App Screenshot](https://your-image-url.com)  
+*A simple, intuitive interface to manage your cookies and history with just a few clicks.*
+
+## 🛠️ Built With
+
+- **Python** - Core programming language.
+- **Tkinter** - GUI framework for the application interface.
+- **Psutil** - Used to manage browser processes.
+
+## 🤝 Contributing
+
+Contributions are welcome! Please follow these steps:
+1. Fork the project.
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`).
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`).
+4. Push to the branch (`git push origin feature/AmazingFeature`).
+5. Open a pull request.
+
+## 📝 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
+
+**Developed with ❤️ by [Your Name](https://github.com/yourusername)**
