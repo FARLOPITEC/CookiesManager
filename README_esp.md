@@ -36,7 +36,10 @@ pip install psutil
    ```
 3. Ejecuta la aplicación:
    ```bash
-   python manage_cookies.py
+   python CookiesManagerGraphics.py
+   ```
+   ```bash
+   python CookieManagerConsole.py
    ```
 
 ## 🌐 Navegadores Compatibles
