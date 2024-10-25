@@ -1,34 +1,23 @@
-# CookiesManager
+# Cookies & History Manager 🍪🕑
 
-## Descripción
-CookiesManager es una herramienta desarrollada en Python para gestionar las cookies de varios navegadores web. Esta herramienta permite eliminar cookies, historial y realizar otras acciones de privacidad en navegadores como Chrome, Firefox, Edge, Opera, Opera GX, Vivaldi y Brave.
+A cross-platform application to manage and delete browser cookies and history with ease.
 
-## Instalación
-Para utilizar este script, necesitas instalar las librerías `browser-cookie3` y `psutil`. Puedes instalarlas usando el siguiente comando:
+## 📋 Features
 
-## Uso
-El script proporciona una interfaz gráfica para gestionar las cookies y el historial de los navegadores. Para ejecutar el script, simplemente usa el siguiente comando:
-`python CookiesManagerGraphics.py`
+- **Manage Cookies**: Delete cookies for popular browsers like Chrome, Firefox, Edge, and more.
+- **Clear Browsing History**: Easily delete browsing history to enhance privacy.
+- **Cross-platform**: Compatible with **Windows** and future support for **Linux** and **macOS**.
+- **Simple GUI**: User-friendly interface to quickly manage browser data.
+- **Multi-browser Support**: Supports Chrome, Firefox, Edge, Opera, Brave, and more.
 
-También puedes ejecutar el script mediante un archivo batch que oculta la consola:
-@echo off
-cd "ruta del archivo"
-start "" pythonw CookiesManagerGraphics.py
+## 🚀 Getting Started
 
-## Funcionalidades
-Eliminar Cookies: Elimina las cookies de un navegador específico.
-Eliminar Historial: Elimina el historial de navegación de un navegador específico.
-Eliminar Todo: Elimina tanto las cookies como el historial de un navegador específico.
-Eliminar Todo y Apagar: Elimina las cookies y el historial, y apaga el sistema.
+### Prerequisites
 
-## Navegadores Soportados
-Google Chrome
-Mozilla Firefox
-Microsoft Edge
-Opera
-Opera GX
-Vivaldi
-Brave
+Make sure you have the following installed:
+- **Python 3.x**
+- **Psutil Library** (automatically installed by the script)
 
-```sh
-pip install browser-cookie3 psutil
+To manually install `psutil`, run:
+```bash
+pip install psutil
