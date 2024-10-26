@@ -1,5 +1,5 @@
 # Versión: 0.4.8
-# Autor: Francisco Fernández Fernández
+# Autor: Francisco Fernández Fernández 
 
 import importlib
 import itertools
