@@ -39,7 +39,7 @@ pip install psutil
    python CookiesManagerGraphics.py
    ```
    ```bash
-   python CookieManagerConsole.py
+   python CookiesManagerConsole.py
    ```
 
 ## 🌐 Navegadores Compatibles
@@ -71,10 +71,6 @@ pip install psutil
 3. Realiza tus cambios (`git commit -m 'Añadir FuncionalidadAsombrosa'`).
 4. Haz push a la rama (`git push origin feature/FuncionalidadAsombrosa`).
 5. Abre un pull request.
-
-## 📝 Licencia
-
-Este proyecto está licenciado bajo la Licencia MIT - mira el archivo [LICENSE](LICENSE) para más detalles.
 
 ---
 
