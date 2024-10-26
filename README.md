@@ -1,4 +1,4 @@
-
+8
 # Cookies & History Manager 🍪🕑
 
 A cross-platform application to manage and delete browser cookies and history with ease.
@@ -73,9 +73,6 @@ Contributions are welcome! Please follow these steps:
 4. Push to the branch (`git push origin feature/AmazingFeature`).
 5. Open a pull request.
 
-## 📝 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
 
