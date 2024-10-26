@@ -1,4 +1,4 @@
-8
+
 # Cookies & History Manager 🍪🕑
 
 A cross-platform application to manage and delete browser cookies and history with ease.
@@ -39,7 +39,7 @@ pip install psutil
    python CookiesManagerGraphics.py
    ```
    ```bash
-   python CookieManagerConsole.py
+   python CookiesManagerConsole.py
    ```
 
 
