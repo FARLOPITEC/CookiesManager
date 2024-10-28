@@ -1,3 +1,6 @@
+# Versión: 0.8.9
+# Autor: Francisco Fernández Fernández 
+
 import importlib
 import itertools
 import subprocess
