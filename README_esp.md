@@ -27,8 +27,8 @@ pip install psutil
 ### Instalación
 
 1. Clona el repositorio:
-   ```bash
-   git clone https://github.com/tuusuario/GestorCookies.git
+  ```bash
+   git clone https://github.com/FARLOPITEC/CookiesManager.git
    ```
 2. Navega hasta el directorio del proyecto:
    ```bash
